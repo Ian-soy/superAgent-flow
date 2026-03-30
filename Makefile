@@ -146,25 +146,50 @@ clean: stop
 
 # Initialize Docker containers and install dependencies
 docker-init:
+ifeq ($(OS),Windows_NT)
+	@$(BASH) ./scripts/docker.sh init
+else
 	@./scripts/docker.sh init
+endif
 
 # Start Docker development environment
 docker-start:
+ifeq ($(OS),Windows_NT)
+	@$(BASH) ./scripts/docker.sh start
+else
 	@./scripts/docker.sh start
+endif
 
 # Stop Docker development environment
 docker-stop:
+ifeq ($(OS),Windows_NT)
+	@$(BASH) ./scripts/docker.sh stop
+else
 	@./scripts/docker.sh stop
+endif
 
 # View Docker development logs
 docker-logs:
+ifeq ($(OS),Windows_NT)
+	@$(BASH) ./scripts/docker.sh logs
+else
 	@./scripts/docker.sh logs
+endif
 
 # View Docker development logs
 docker-logs-frontend:
+ifeq ($(OS),Windows_NT)
+	@$(BASH) ./scripts/docker.sh logs --frontend
+else
 	@./scripts/docker.sh logs --frontend
+endif
+
 docker-logs-gateway:
+ifeq ($(OS),Windows_NT)
+	@$(BASH) ./scripts/docker.sh logs --gateway
+else
 	@./scripts/docker.sh logs --gateway
+endif
 
 # ==========================================
 # Production Docker Commands

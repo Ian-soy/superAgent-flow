@@ -49,7 +49,7 @@ cleanup_apple_container() {
 
         if [ "$CONTAINER_LIST" != "[]" ] && [ -n "$CONTAINER_LIST" ]; then
             # Extract container IDs that match our prefix
-            CONTAINER_IDS=$(echo "$CONTAINER_LIST" | python3 -c "
+            CONTAINER_IDS=$(echo "$CONTAINER_LIST" | python -c "
 import json
 import sys
 try:

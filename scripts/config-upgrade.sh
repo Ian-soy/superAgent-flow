@@ -23,26 +23,28 @@ else
 fi
 
 if [ ! -f "$EXAMPLE" ]; then
-    echo "✗ config.example.yaml not found at $EXAMPLE"
+    echo "[ERROR] config.example.yaml not found at $EXAMPLE"
     exit 1
 fi
 
 if [ -z "$CONFIG" ]; then
     echo "No config.yaml found — creating from example..."
     cp "$EXAMPLE" "$REPO_ROOT/config.yaml"
-    echo "✓ config.yaml created. Please review and set your API keys."
+    echo "[OK] config.yaml created. Please review and set your API keys."
     exit 0
 fi
 
 # Use inline Python to do migrations + recursive merge with PyYAML
-cd "$REPO_ROOT/backend" && uv run python3 -c "
-import sys, shutil, copy, re
+export CONFIG_PATH="$CONFIG"
+export EXAMPLE_PATH="$EXAMPLE"
+cd "$REPO_ROOT/backend" && uv run python -c "
+import sys, shutil, copy, re, os
 from pathlib import Path
 
 import yaml
 
-config_path = Path('$CONFIG')
-example_path = Path('$EXAMPLE')
+config_path = Path(os.environ['CONFIG_PATH'])
+example_path = Path(os.environ['EXAMPLE_PATH'])
 
 with open(config_path, encoding='utf-8') as f:
     raw_text = f.read()
@@ -55,7 +57,7 @@ user_version = user.get('config_version', 0)
 example_version = example.get('config_version', 0)
 
 if user_version >= example_version:
-    print(f'✓ config.yaml is already up to date (version {user_version}).')
+    print(f'[OK] config.yaml is already up to date (version {user_version}).')
     sys.exit(0)
 
 print(f'Upgrading config.yaml: version {user_version} → {example_version}')
@@ -141,6 +143,6 @@ if not migrated and not added:
     print('No changes needed (version bumped only).')
 
 print()
-print(f'✓ config.yaml upgraded to version {example_version}.')
+print(f'[OK] config.yaml upgraded to version {example_version}.')
 print('  Please review the changes and set any new required values.')
 "

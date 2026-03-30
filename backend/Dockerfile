@@ -4,7 +4,7 @@
 ARG UV_IMAGE=ghcr.io/astral-sh/uv:0.7.20
 FROM ${UV_IMAGE} AS uv-source
 
-FROM python:3.12-slim-bookworm
+FROM python:3.12-slim
 
 ARG NODE_MAJOR=22
 ARG APT_MIRROR

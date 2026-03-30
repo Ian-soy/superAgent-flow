@@ -93,7 +93,7 @@ if [ -z "$BETTER_AUTH_SECRET" ]; then
         echo -e "${GREEN}✓ BETTER_AUTH_SECRET loaded from $_secret_file${NC}"
     else
         export BETTER_AUTH_SECRET
-        BETTER_AUTH_SECRET="$(python3 -c 'import secrets; print(secrets.token_hex(32))')"
+        BETTER_AUTH_SECRET="$(python -c 'import secrets; print(secrets.token_hex(32))')"
         echo "$BETTER_AUTH_SECRET" > "$_secret_file"
         chmod 600 "$_secret_file"
         echo -e "${GREEN}✓ BETTER_AUTH_SECRET generated → $_secret_file${NC}"
